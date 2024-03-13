@@ -4,3 +4,4 @@ htmldocs/
 
 examples/*
 !examples/*.nim
+!examples/*.nims
