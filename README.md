@@ -1,0 +1,2 @@
+# tesseract.nim
+Tesseract bindings
