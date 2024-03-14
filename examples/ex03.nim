@@ -8,9 +8,9 @@ proc main =
   let image = pixRead("phototest.tif")
   api.setImage(image)
   var boxes:ptr Boxa = api.getComponentImages(RIL_TEXTLINE, true)
-  #var tmp = boxes.getN #echo boxes[].n.int
-  var tmp = boxes.boxaGetCount
-  for i in 0..<tmp:
+  #echo boxes[].n
+  #var tmp = boxes.boxaGetCount
+  for i in 0..<boxes[].n:
     var box = boxaGetBox(boxes, i, L_CLONE)
     var x,y,w,h:LInt32
     discard box.boxGetGeometry(x.unsafeAddr,y.unsafeAddr,w.unsafeAddr,h.unsafeAddr) 
