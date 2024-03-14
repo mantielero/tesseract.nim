@@ -67,3 +67,9 @@ proc getText*(self: Tesseract): string =
     return $tessBaseAPIGetUTF8Text(handle = self.handle)
 
 
+proc getComponentImages*(self:Tesseract;
+                        level: TessPageIteratorLevel;
+                        textOnly: bool; 
+                        pixa: ptr ptr Pixa = nil;
+                        blockids: ptr ptr cint = nil): ptr Boxa =
+  self.handle.tessBaseAPIGetComponentImages(level, textOnly, pixa, blockids)

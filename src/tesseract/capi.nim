@@ -17,9 +17,9 @@ import leptonica
 # import
 #   `export`
 
-# when not defined(BOOL):
+# when not defined(bool):
 #   const
-#     BOOL* = int
+#     bool* = int
 #     TRUE* = 1
 #     FALSE* = 0
 
@@ -66,11 +66,7 @@ type
 #   TessProgressFunc* = proc (ths: ptr Etext_Desc; left: cint; right: cint;
 #                             top: cint; bottom: cint): bool
 
-
-# type
-#   Pix* {.incompleteStruct, importc: "struct Pix".} = object
-#   Boxa* {.incompleteStruct, importc: "struct Boxa".} = object
-#   Pixa* {.incompleteStruct, importc: "struct Pixa".} = object    
+ 
 
 proc tessVersion*(): cstring {.importc: "TessVersion".}
 
@@ -86,14 +82,14 @@ proc tessTextRendererCreate*(outputbase: cstring): ptr TessResultRenderer {.
     importc: "TessTextRendererCreate".}
 proc tessHOcrRendererCreate*(outputbase: cstring): ptr TessResultRenderer {.
     importc: "TessHOcrRendererCreate".}
-proc tessHOcrRendererCreate2*(outputbase: cstring; fontInfo: Bool): ptr TessResultRenderer {.
+proc tessHOcrRendererCreate2*(outputbase: cstring; fontInfo: bool): ptr TessResultRenderer {.
     importc: "TessHOcrRendererCreate2".}
 proc tessAltoRendererCreate*(outputbase: cstring): ptr TessResultRenderer {.
     importc: "TessAltoRendererCreate".}
 proc tessTsvRendererCreate*(outputbase: cstring): ptr TessResultRenderer {.
     importc: "TessTsvRendererCreate".}
 proc tessPDFRendererCreate*(outputbase: cstring; datadir: cstring;
-                            textonly: Bool): ptr TessResultRenderer {.
+                            textonly: bool): ptr TessResultRenderer {.
     importc: "TessPDFRendererCreate".}
 proc tessUnlvRendererCreate*(outputbase: cstring): ptr TessResultRenderer {.
     importc: "TessUnlvRendererCreate".}
@@ -111,12 +107,12 @@ proc tessResultRendererInsert*(renderer: ptr TessResultRenderer;
 proc tessResultRendererNext*(renderer: ptr TessResultRenderer): ptr TessResultRenderer {.
     importc: "TessResultRendererNext".}
 proc tessResultRendererBeginDocument*(renderer: ptr TessResultRenderer;
-                                      title: cstring): Bool {.
+                                      title: cstring): bool {.
     importc: "TessResultRendererBeginDocument".}
 proc tessResultRendererAddImage*(renderer: ptr TessResultRenderer;
-                                 api: ptr TessBaseAPI): Bool {.
+                                 api: ptr TessBaseAPI): bool {.
     importc: "TessResultRendererAddImage".}
-proc tessResultRendererEndDocument*(renderer: ptr TessResultRenderer): Bool {.
+proc tessResultRendererEndDocument*(renderer: ptr TessResultRenderer): bool {.
     importc: "TessResultRendererEndDocument".}
 proc tessResultRendererExtention*(renderer: ptr TessResultRenderer): cstring {.
     importc: "TessResultRendererExtention".}
@@ -160,19 +156,19 @@ proc tessBaseAPISetOutputName*(handle: ptr TessBaseAPI; name: cstring) {.
 
 
 proc tessBaseAPISetVariable*(handle: ptr TessBaseAPI; name: cstring;
-                             value: cstring): Bool {.
+                             value: cstring): bool {.
     importc: "TessBaseAPISetVariable".}
 proc tessBaseAPISetDebugVariable*(handle: ptr TessBaseAPI; name: cstring;
-                                  value: cstring): Bool {.
+                                  value: cstring): bool {.
     importc: "TessBaseAPISetDebugVariable".}
 proc tessBaseAPIGetIntVariable*(handle: ptr TessBaseAPI; name: cstring;
-                                value: ptr cint): Bool {.
+                                value: ptr cint): bool {.
     importc: "TessBaseAPIGetIntVariable".}
-proc tessBaseAPIGetBoolVariable*(handle: ptr TessBaseAPI; name: cstring;
-                                 value: ptr Bool): Bool {.
-    importc: "TessBaseAPIGetBoolVariable".}
+proc tessBaseAPIGetboolVariable*(handle: ptr TessBaseAPI; name: cstring;
+                                 value: ptr bool): bool {.
+    importc: "TessBaseAPIGetboolVariable".}
 proc tessBaseAPIGetDoubleVariable*(handle: ptr TessBaseAPI; name: cstring;
-                                   value: ptr cdouble): Bool {.
+                                   value: ptr cdouble): bool {.
     importc: "TessBaseAPIGetDoubleVariable".}
 proc tessBaseAPIGetStringVariable*(handle: ptr TessBaseAPI; name: cstring): cstring {.
     importc: "TessBaseAPIGetStringVariable".}
@@ -180,7 +176,7 @@ proc tessBaseAPIGetStringVariable*(handle: ptr TessBaseAPI; name: cstring): cstr
 proc tessBaseAPIPrintVariables*(handle: ptr TessBaseAPI; fp: ptr File) {.
     importc: "TessBaseAPIPrintVariables".}
 
-proc tessBaseAPIPrintVariablesToFile*(handle: ptr TessBaseAPI; filename: cstring): Bool {.
+proc tessBaseAPIPrintVariablesToFile*(handle: ptr TessBaseAPI; filename: cstring): bool {.
     importc: "TessBaseAPIPrintVariablesToFile".}
 ]#
 
@@ -247,10 +243,11 @@ proc tessBaseAPISetImage2*(handle: ptr TessBaseAPI; pix: ptr Pix) {.
 proc tessBaseAPISetSourceResolution*(handle: ptr TessBaseAPI; ppi: cint) {.
     importc: "TessBaseAPISetSourceResolution".}
 
-#[
+
 proc tessBaseAPISetRectangle*(handle: ptr TessBaseAPI; left: cint; top: cint;
                               width: cint; height: cint) {.
     importc: "TessBaseAPISetRectangle".}
+#[
 proc tessBaseAPIGetThresholdedImage*(handle: ptr TessBaseAPI): ptr Pix {.
     importc: "TessBaseAPIGetThresholdedImage".}
 proc tessBaseAPIGetRegions*(handle: ptr TessBaseAPI; pixa: ptr ptr Pixa): ptr Boxa {.
@@ -258,7 +255,7 @@ proc tessBaseAPIGetRegions*(handle: ptr TessBaseAPI; pixa: ptr ptr Pixa): ptr Bo
 proc tessBaseAPIGetTextlines*(handle: ptr TessBaseAPI; pixa: ptr ptr Pixa;
                               blockids: ptr ptr cint): ptr Boxa {.
     importc: "TessBaseAPIGetTextlines".}
-proc tessBaseAPIGetTextlines1*(handle: ptr TessBaseAPI; rawImage: Bool;
+proc tessBaseAPIGetTextlines1*(handle: ptr TessBaseAPI; rawImage: bool;
                                rawPadding: cint; pixa: ptr ptr Pixa;
                                blockids: ptr ptr cint; paraids: ptr ptr cint): ptr Boxa {.
     importc: "TessBaseAPIGetTextlines1".}
@@ -270,14 +267,18 @@ proc tessBaseAPIGetWords*(handle: ptr TessBaseAPI; pixa: ptr ptr Pixa): ptr Boxa
 proc tessBaseAPIGetConnectedComponents*(handle: ptr TessBaseAPI;
                                         cc: ptr ptr Pixa): ptr Boxa {.
     importc: "TessBaseAPIGetConnectedComponents".}
+]#
+
 proc tessBaseAPIGetComponentImages*(handle: ptr TessBaseAPI;
                                     level: TessPageIteratorLevel;
-                                    textOnly: Bool; pixa: ptr ptr Pixa;
+                                    textOnly: bool; pixa: ptr ptr Pixa;
                                     blockids: ptr ptr cint): ptr Boxa {.
     importc: "TessBaseAPIGetComponentImages".}
+
+#[
 proc tessBaseAPIGetComponentImages1*(handle: ptr TessBaseAPI;
                                      level: TessPageIteratorLevel;
-                                     textOnly: Bool; rawImage: Bool;
+                                     textOnly: bool; rawImage: bool;
                                      rawPadding: cint; pixa: ptr ptr Pixa;
                                      blockids: ptr ptr cint;
                                      paraids: ptr ptr cint): ptr Boxa {.
@@ -290,12 +291,12 @@ proc tessBaseAPIRecognize*(handle: ptr TessBaseAPI; monitor: ptr Etext_Desc): ci
     importc: "TessBaseAPIRecognize".}
 proc tessBaseAPIProcessPages*(handle: ptr TessBaseAPI; filename: cstring;
                               retryConfig: cstring; timeoutMillisec: cint;
-                              renderer: ptr TessResultRenderer): Bool {.
+                              renderer: ptr TessResultRenderer): bool {.
     importc: "TessBaseAPIProcessPages".}
 proc tessBaseAPIProcessPage*(handle: ptr TessBaseAPI; pix: ptr Pix;
                              pageIndex: cint; filename: cstring;
                              retryConfig: cstring; timeoutMillisec: cint;
-                             renderer: ptr TessResultRenderer): Bool {.
+                             renderer: ptr TessResultRenderer): bool {.
     importc: "TessBaseAPIProcessPage".}
 proc tessBaseAPIGetIterator*(handle: ptr TessBaseAPI): ptr TessResultIterator {.
     importc: "TessBaseAPIGetIterator".}
@@ -319,20 +320,24 @@ proc tessBaseAPIGetWordStrBoxText*(handle: ptr TessBaseAPI; pageNumber: cint): c
     importc: "TessBaseAPIGetWordStrBoxText".}
 proc tessBaseAPIGetUNLVText*(handle: ptr TessBaseAPI): cstring {.
     importc: "TessBaseAPIGetUNLVText".}
+]#
+
+
 proc tessBaseAPIMeanTextConf*(handle: ptr TessBaseAPI): cint {.
     importc: "TessBaseAPIMeanTextConf".}
+#[
 proc tessBaseAPIAllWordConfidences*(handle: ptr TessBaseAPI): ptr cint {.
     importc: "TessBaseAPIAllWordConfidences".}
 when not defined(DISABLED_LEGACY_ENGINE):
   proc tessBaseAPIAdaptToWordStr*(handle: ptr TessBaseAPI;
-                                  mode: TessPageSegMode; wordstr: cstring): Bool {.
+                                  mode: TessPageSegMode; wordstr: cstring): bool {.
       importc: "TessBaseAPIAdaptToWordStr".}
 proc tessBaseAPIClear*(handle: ptr TessBaseAPI) {.importc: "TessBaseAPIClear".}
 proc tessBaseAPIEnd*(handle: ptr TessBaseAPI) {.importc: "TessBaseAPIEnd".}
 proc tessBaseAPIIsValidWord*(handle: ptr TessBaseAPI; word: cstring): cint {.
     importc: "TessBaseAPIIsValidWord".}
 proc tessBaseAPIGetTextDirection*(handle: ptr TessBaseAPI; outOffset: ptr cint;
-                                  outSlope: ptr cfloat): Bool {.
+                                  outSlope: ptr cfloat): bool {.
     importc: "TessBaseAPIGetTextDirection".}
 proc tessBaseAPIGetUnichar*(handle: ptr TessBaseAPI; unicharId: cint): cstring {.
     importc: "TessBaseAPIGetUnichar".}
@@ -343,7 +348,7 @@ when not defined(DISABLED_LEGACY_ENGINE):
   ##  function
   proc tessBaseAPIDetectOrientationScript*(handle: ptr TessBaseAPI;
       orientDeg: ptr cint; orientConf: ptr cfloat; scriptName: cstringArray;
-      scriptConf: ptr cfloat): Bool {.importc: "TessBaseAPIDetectOrientationScript".}
+      scriptConf: ptr cfloat): bool {.importc: "TessBaseAPIDetectOrientationScript".}
 proc tessBaseAPISetMinOrientationMargin*(handle: ptr TessBaseAPI;
     margin: cdouble) {.importc: "TessBaseAPISetMinOrientationMargin".}
 proc tessBaseAPINumDawgs*(handle: ptr TessBaseAPI): cint {.
@@ -365,19 +370,19 @@ proc tessPageIteratorCopy*(handle: ptr TessPageIterator): ptr TessPageIterator {
 proc tessPageIteratorBegin*(handle: ptr TessPageIterator) {.
     importc: "TessPageIteratorBegin".}
 proc tessPageIteratorNext*(handle: ptr TessPageIterator;
-                           level: TessPageIteratorLevel): Bool {.
+                           level: TessPageIteratorLevel): bool {.
     importc: "TessPageIteratorNext".}
 proc tessPageIteratorIsAtBeginningOf*(handle: ptr TessPageIterator;
-                                      level: TessPageIteratorLevel): Bool {.
+                                      level: TessPageIteratorLevel): bool {.
     importc: "TessPageIteratorIsAtBeginningOf".}
 proc tessPageIteratorIsAtFinalElement*(handle: ptr TessPageIterator;
                                        level: TessPageIteratorLevel;
-                                       element: TessPageIteratorLevel): Bool {.
+                                       element: TessPageIteratorLevel): bool {.
     importc: "TessPageIteratorIsAtFinalElement".}
 proc tessPageIteratorBoundingBox*(handle: ptr TessPageIterator;
                                   level: TessPageIteratorLevel; left: ptr cint;
                                   top: ptr cint; right: ptr cint;
-                                  bottom: ptr cint): Bool {.
+                                  bottom: ptr cint): bool {.
     importc: "TessPageIteratorBoundingBox".}
 proc tessPageIteratorBlockType*(handle: ptr TessPageIterator): TessPolyBlockType {.
     importc: "TessPageIteratorBlockType".}
@@ -391,7 +396,7 @@ proc tessPageIteratorGetImage*(handle: ptr TessPageIterator;
     importc: "TessPageIteratorGetImage".}
 proc tessPageIteratorBaseline*(handle: ptr TessPageIterator;
                                level: TessPageIteratorLevel; x1: ptr cint;
-                               y1: ptr cint; x2: ptr cint; y2: ptr cint): Bool {.
+                               y1: ptr cint; x2: ptr cint; y2: ptr cint): bool {.
     importc: "TessPageIteratorBaseline".}
 proc tessPageIteratorOrientation*(handle: ptr TessPageIterator;
                                   orientation: ptr TessOrientation;
@@ -400,7 +405,7 @@ proc tessPageIteratorOrientation*(handle: ptr TessPageIterator;
                                   deskewAngle: ptr cfloat) {.
     importc: "TessPageIteratorOrientation".}
 proc tessPageIteratorParagraphInfo*(handle: ptr TessPageIterator; justification: ptr TessParagraphJustification;
-                                    isListItem: ptr Bool; isCrown: ptr Bool;
+                                    isListItem: ptr bool; isCrown: ptr bool;
                                     firstLineIndent: ptr cint) {.
     importc: "TessPageIteratorParagraphInfo".}
 ]#
@@ -418,7 +423,7 @@ proc tessResultIteratorGetPageIteratorConst*(handle: ptr TessResultIterator): pt
 proc tessResultIteratorGetChoiceIterator*(handle: ptr TessResultIterator): ptr TessChoiceIterator {.
     importc: "TessResultIteratorGetChoiceIterator".}
 proc tessResultIteratorNext*(handle: ptr TessResultIterator;
-                             level: TessPageIteratorLevel): Bool {.
+                             level: TessPageIteratorLevel): bool {.
     importc: "TessResultIteratorNext".}
 proc tessResultIteratorGetUTF8Text*(handle: ptr TessResultIterator;
                                     level: TessPageIteratorLevel): cstring {.
@@ -429,23 +434,23 @@ proc tessResultIteratorConfidence*(handle: ptr TessResultIterator;
 proc tessResultIteratorWordRecognitionLanguage*(handle: ptr TessResultIterator): cstring {.
     importc: "TessResultIteratorWordRecognitionLanguage".}
 proc tessResultIteratorWordFontAttributes*(handle: ptr TessResultIterator;
-    isBold: ptr Bool; isItalic: ptr Bool; isUnderlined: ptr Bool;
-    isMonospace: ptr Bool; isSerif: ptr Bool; isSmallcaps: ptr Bool;
+    isBold: ptr bool; isItalic: ptr bool; isUnderlined: ptr bool;
+    isMonospace: ptr bool; isSerif: ptr bool; isSmallcaps: ptr bool;
     pointsize: ptr cint; fontId: ptr cint): cstring {.
     importc: "TessResultIteratorWordFontAttributes".}
-proc tessResultIteratorWordIsFromDictionary*(handle: ptr TessResultIterator): Bool {.
+proc tessResultIteratorWordIsFromDictionary*(handle: ptr TessResultIterator): bool {.
     importc: "TessResultIteratorWordIsFromDictionary".}
-proc tessResultIteratorWordIsNumeric*(handle: ptr TessResultIterator): Bool {.
+proc tessResultIteratorWordIsNumeric*(handle: ptr TessResultIterator): bool {.
     importc: "TessResultIteratorWordIsNumeric".}
-proc tessResultIteratorSymbolIsSuperscript*(handle: ptr TessResultIterator): Bool {.
+proc tessResultIteratorSymbolIsSuperscript*(handle: ptr TessResultIterator): bool {.
     importc: "TessResultIteratorSymbolIsSuperscript".}
-proc tessResultIteratorSymbolIsSubscript*(handle: ptr TessResultIterator): Bool {.
+proc tessResultIteratorSymbolIsSubscript*(handle: ptr TessResultIterator): bool {.
     importc: "TessResultIteratorSymbolIsSubscript".}
-proc tessResultIteratorSymbolIsDropcap*(handle: ptr TessResultIterator): Bool {.
+proc tessResultIteratorSymbolIsDropcap*(handle: ptr TessResultIterator): bool {.
     importc: "TessResultIteratorSymbolIsDropcap".}
 proc tessChoiceIteratorDelete*(handle: ptr TessChoiceIterator) {.
     importc: "TessChoiceIteratorDelete".}
-proc tessChoiceIteratorNext*(handle: ptr TessChoiceIterator): Bool {.
+proc tessChoiceIteratorNext*(handle: ptr TessChoiceIterator): bool {.
     importc: "TessChoiceIteratorNext".}
 proc tessChoiceIteratorGetUTF8Text*(handle: ptr TessChoiceIterator): cstring {.
     importc: "TessChoiceIteratorGetUTF8Text".}
