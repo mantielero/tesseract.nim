@@ -18,14 +18,7 @@ proc main =
     var txt = api.getText()
     var confidence = api.handle.tessBaseAPIMeanTextConf()
     echo i, ": ", txt, "   confidence: ", confidence, " x:",x, " y:",y, " w:",w, " h:",h
-
+    # boxDestroy(&box);
 
 main()
 
-
-#[
-    fprintf(stdout, "Box[%d]: x=%d, y=%d, w=%d, h=%d, confidence: %d, text: %s",
-                    i, box->x, box->y, box->w, box->h, conf, ocrResult);
-    boxDestroy(&box);
-
-]#
