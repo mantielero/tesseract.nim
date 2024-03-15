@@ -3,35 +3,51 @@
 #[
 Example of iterator over the classifier choices for a single symbol
 
-  Pix *image = pixRead("/usr/src/tesseract/testing/phototest.tif");
-  tesseract::TessBaseAPI *api = new tesseract::TessBaseAPI();
-  api->Init(NULL, "eng");
-  api->SetImage(image);
-  api->SetVariable("save_blob_choices", "T");
-  api->SetRectangle(37, 228, 548, 31);
-  api->Recognize(NULL);
 
-  tesseract::ResultIterator* ri = api->GetIterator();
-  tesseract::PageIteratorLevel level = tesseract::RIL_SYMBOL;
-  if(ri != 0) {
-      do {
-          const char* symbol = ri->GetUTF8Text(level);
-          float conf = ri->Confidence(level);
-          if(symbol != 0) {
-              printf("symbol %s, conf: %f", symbol, conf);
-              bool indent = false;
-              tesseract::ChoiceIterator ci(*ri);
-              do {
-                  if (indent) printf("\t\t ");
-                  printf("\t- ");
-                  const char* choice = ci.GetUTF8Text();
-                  printf("%s conf: %f\n", choice, ci.Confidence());
-                  indent = true;
-              } while(ci.Next());
-          }
-          printf("---------------------------------------------\n");
-          delete[] symbol;
-      } while((ri->Next(level)));
-  }
-  delete api;
 ]#
+
+
+import tesseract
+import leptonica
+
+proc main =
+  var api = newTesseract("eng")
+  let image = pixRead("phototest.tif")
+  api.setImage(image)
+
+  var ok = api.handle.tessBaseAPISetVariable("save_blob_choices", "T")
+  api.handle.tessBaseAPISetRectangle(37, 228, 548, 31)
+  var res = api.handle.tessBaseAPIRecognize(nil)
+
+  var ri = api.handle.tessBaseAPIGetIterator()
+  var pi = ri.tessResultIteratorGetPageIterator()
+
+  var level = RIL_SYMBOL
+
+  var flag = true
+  while flag:
+    var symbol = ri.tessResultIteratorGetUTF8Text(level)
+    var conf = ri.tessResultIteratorConfidence(level)
+    if symbol != nil:
+      echo "Symbol: ", symbol, "  conf: ", conf
+      var indent = false
+      var ci = tessResultIteratorGetChoiceIterator(ri)
+      while ci.tessChoiceIteratorNext():
+        if indent:
+          echo "\t\t "
+          echo "\t- "
+          var choice = ci.tessChoiceIteratorGetUTF8Text
+          echo choice, " conf: ", ci.tessChoiceIteratorConfidence
+          indent = true
+
+
+    # var conf = ri.tessResultIteratorConfidence(level)
+    # var x1,y1,x2,y2:cint
+    # var tmp = pi.tessPageIteratorBoundingBox(level, x1.unsafeAddr,y1.unsafeAddr, x2.unsafeAddr,y2.unsafeAddr)
+
+    # echo "word: ", word
+    # echo "  conf: ", conf
+    # echo "  bb: ", x1, " ", y1, " ", x2, " ", y2
+    flag =  pi.tessPageIteratorNext(level)
+
+main()

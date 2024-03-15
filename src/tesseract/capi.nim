@@ -34,6 +34,7 @@ type
   Etext_Desc* {.importc:"struct ETEXT_DESC".} = object
   TessResultIterator* {.importc:"struct TessResultIterator".} = object
   TessPageIterator* {.importc:"struct TessPageIterator".} = object
+  TessChoiceIterator* {.importc:"struct TessChoiceIterator".} = object
 
 {.push header: "capi.h".}
 type
@@ -155,11 +156,13 @@ proc tessBaseAPIGetDatapath*(handle: ptr TessBaseAPI): cstring {.
     importc: "TessBaseAPIGetDatapath".}
 proc tessBaseAPISetOutputName*(handle: ptr TessBaseAPI; name: cstring) {.
     importc: "TessBaseAPISetOutputName".}
-
+]#
 
 proc tessBaseAPISetVariable*(handle: ptr TessBaseAPI; name: cstring;
                              value: cstring): bool {.
     importc: "TessBaseAPISetVariable".}
+
+#[
 proc tessBaseAPISetDebugVariable*(handle: ptr TessBaseAPI; name: cstring;
                                   value: cstring): bool {.
     importc: "TessBaseAPISetDebugVariable".}
@@ -444,12 +447,15 @@ proc tessResultIteratorGetPageIterator*(handle: ptr TessResultIterator): ptr Tes
 #[
 proc tessResultIteratorGetPageIteratorConst*(handle: ptr TessResultIterator): ptr TessPageIterator {.
     importc: "TessResultIteratorGetPageIteratorConst".}
+]#
 proc tessResultIteratorGetChoiceIterator*(handle: ptr TessResultIterator): ptr TessChoiceIterator {.
     importc: "TessResultIteratorGetChoiceIterator".}
+
+
 proc tessResultIteratorNext*(handle: ptr TessResultIterator;
                              level: TessPageIteratorLevel): bool {.
     importc: "TessResultIteratorNext".}
-]#
+
 proc tessResultIteratorGetUTF8Text*(handle: ptr TessResultIterator;
                                     level: TessPageIteratorLevel): cstring {.
     importc: "TessResultIteratorGetUTF8Text".}
@@ -478,13 +484,17 @@ proc tessResultIteratorSymbolIsDropcap*(handle: ptr TessResultIterator): bool {.
     importc: "TessResultIteratorSymbolIsDropcap".}
 proc tessChoiceIteratorDelete*(handle: ptr TessChoiceIterator) {.
     importc: "TessChoiceIteratorDelete".}
+]#
 proc tessChoiceIteratorNext*(handle: ptr TessChoiceIterator): bool {.
     importc: "TessChoiceIteratorNext".}
+
 proc tessChoiceIteratorGetUTF8Text*(handle: ptr TessChoiceIterator): cstring {.
     importc: "TessChoiceIteratorGetUTF8Text".}
+
+
 proc tessChoiceIteratorConfidence*(handle: ptr TessChoiceIterator): cfloat {.
     importc: "TessChoiceIteratorConfidence".}
-]#
+
 
 ##  Progress monitor
 #[
