@@ -518,9 +518,5 @@ proc tessMonitorSetDeadlineMSecs*(monitor: ptr Etext_Desc; deadline: cint) {.
     importc: "TessMonitorSetDeadlineMSecs".}
 ]#
 
-
-
 {.pop.}
-
-
 
