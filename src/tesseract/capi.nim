@@ -31,7 +31,9 @@ type
   TessBaseAPI* {.importc:"struct TessBaseAPI", incompleteStruct.}  = object
   TessBaseAPIptr* = ptr TessBaseAPI
   #TessBaseAPIptr* = ptr TessBaseAPI
-
+  Etext_Desc* {.importc:"struct ETEXT_DESC".} = object
+  TessResultIterator* {.importc:"struct TessResultIterator".} = object
+  TessPageIterator* {.importc:"struct TessPageIterator".} = object
 
 {.push header: "capi.h".}
 type
@@ -287,8 +289,11 @@ proc tessBaseAPIGetThresholdedImageScaleFactor*(handle: ptr TessBaseAPI): cint {
     importc: "TessBaseAPIGetThresholdedImageScaleFactor".}
 proc tessBaseAPIAnalyseLayout*(handle: ptr TessBaseAPI): ptr TessPageIterator {.
     importc: "TessBaseAPIAnalyseLayout".}
+]#
 proc tessBaseAPIRecognize*(handle: ptr TessBaseAPI; monitor: ptr Etext_Desc): cint {.
     importc: "TessBaseAPIRecognize".}
+
+#[
 proc tessBaseAPIProcessPages*(handle: ptr TessBaseAPI; filename: cstring;
                               retryConfig: cstring; timeoutMillisec: cint;
                               renderer: ptr TessResultRenderer): bool {.
@@ -298,8 +303,12 @@ proc tessBaseAPIProcessPage*(handle: ptr TessBaseAPI; pix: ptr Pix;
                              retryConfig: cstring; timeoutMillisec: cint;
                              renderer: ptr TessResultRenderer): bool {.
     importc: "TessBaseAPIProcessPage".}
+]#
+
 proc tessBaseAPIGetIterator*(handle: ptr TessBaseAPI): ptr TessResultIterator {.
     importc: "TessBaseAPIGetIterator".}
+
+#[
 proc tessBaseAPIGetMutableIterator*(handle: ptr TessBaseAPI): ptr TessMutableIterator {.
     importc: "TessBaseAPIGetMutableIterator".}
     ]#
@@ -369,9 +378,12 @@ proc tessPageIteratorCopy*(handle: ptr TessPageIterator): ptr TessPageIterator {
     importc: "TessPageIteratorCopy".}
 proc tessPageIteratorBegin*(handle: ptr TessPageIterator) {.
     importc: "TessPageIteratorBegin".}
+]#
 proc tessPageIteratorNext*(handle: ptr TessPageIterator;
                            level: TessPageIteratorLevel): bool {.
     importc: "TessPageIteratorNext".}
+
+#[
 proc tessPageIteratorIsAtBeginningOf*(handle: ptr TessPageIterator;
                                       level: TessPageIteratorLevel): bool {.
     importc: "TessPageIteratorIsAtBeginningOf".}
@@ -379,11 +391,13 @@ proc tessPageIteratorIsAtFinalElement*(handle: ptr TessPageIterator;
                                        level: TessPageIteratorLevel;
                                        element: TessPageIteratorLevel): bool {.
     importc: "TessPageIteratorIsAtFinalElement".}
+]#
 proc tessPageIteratorBoundingBox*(handle: ptr TessPageIterator;
                                   level: TessPageIteratorLevel; left: ptr cint;
                                   top: ptr cint; right: ptr cint;
                                   bottom: ptr cint): bool {.
     importc: "TessPageIteratorBoundingBox".}
+#[
 proc tessPageIteratorBlockType*(handle: ptr TessPageIterator): TessPolyBlockType {.
     importc: "TessPageIteratorBlockType".}
 proc tessPageIteratorGetBinaryImage*(handle: ptr TessPageIterator;
@@ -416,8 +430,11 @@ proc tessResultIteratorDelete*(handle: ptr TessResultIterator) {.
     importc: "TessResultIteratorDelete".}
 proc tessResultIteratorCopy*(handle: ptr TessResultIterator): ptr TessResultIterator {.
     importc: "TessResultIteratorCopy".}
+]#
 proc tessResultIteratorGetPageIterator*(handle: ptr TessResultIterator): ptr TessPageIterator {.
     importc: "TessResultIteratorGetPageIterator".}
+
+#[
 proc tessResultIteratorGetPageIteratorConst*(handle: ptr TessResultIterator): ptr TessPageIterator {.
     importc: "TessResultIteratorGetPageIteratorConst".}
 proc tessResultIteratorGetChoiceIterator*(handle: ptr TessResultIterator): ptr TessChoiceIterator {.
@@ -425,12 +442,16 @@ proc tessResultIteratorGetChoiceIterator*(handle: ptr TessResultIterator): ptr T
 proc tessResultIteratorNext*(handle: ptr TessResultIterator;
                              level: TessPageIteratorLevel): bool {.
     importc: "TessResultIteratorNext".}
+]#
 proc tessResultIteratorGetUTF8Text*(handle: ptr TessResultIterator;
                                     level: TessPageIteratorLevel): cstring {.
     importc: "TessResultIteratorGetUTF8Text".}
+
 proc tessResultIteratorConfidence*(handle: ptr TessResultIterator;
                                    level: TessPageIteratorLevel): cfloat {.
     importc: "TessResultIteratorConfidence".}
+
+#[
 proc tessResultIteratorWordRecognitionLanguage*(handle: ptr TessResultIterator): cstring {.
     importc: "TessResultIteratorWordRecognitionLanguage".}
 proc tessResultIteratorWordFontAttributes*(handle: ptr TessResultIterator;
