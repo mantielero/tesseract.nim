@@ -3,11 +3,6 @@
 #[
 Orientation and script detection (OSD) example
 
-  it->Orientation(&orientation, &direction, &order, &deskew_angle);
-  printf("Orientation: %d;\nWritingDirection: %d\nTextlineOrder: %d\n" \
-         "Deskew angle: %.4f\n",
-         orientation, direction, order, deskew_angle);
-  delete api;
 ]#
 
 import tesseract
