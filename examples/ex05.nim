@@ -2,23 +2,40 @@
 
 #[
 Orientation and script detection (OSD) example
-  const char* inputfile = "/usr/src/tesseract/testing/eurotext.tif";
-  tesseract::Orientation orientation;
-  tesseract::WritingDirection direction;
-  tesseract::TextlineOrder order;
-  float deskew_angle;
 
-  PIX *image = pixRead(inputfile);
-  tesseract::TessBaseAPI *api = new tesseract::TessBaseAPI();
-  api->Init("/usr/src/tesseract/", "eng");
-  api->SetPageSegMode(tesseract::PSM_AUTO_OSD);
-  api->SetImage(image);
-  api->Recognize(0);
-
-  tesseract::PageIterator* it =  api->AnalyseLayout();
   it->Orientation(&orientation, &direction, &order, &deskew_angle);
   printf("Orientation: %d;\nWritingDirection: %d\nTextlineOrder: %d\n" \
          "Deskew angle: %.4f\n",
          orientation, direction, order, deskew_angle);
   delete api;
 ]#
+
+import tesseract
+import leptonica
+
+proc main =
+  var api = newTesseract("eng")
+  let image = pixRead("eurotext.tif")
+
+  api.handle.tessBaseAPISetPageSegMode(PSM_AUTO_OSD)
+  echo api.handle.tessBaseAPIGetPageSegMode
+  api.setImage(image)
+  var res = api.handle.tessBaseAPIRecognize(nil)
+
+  var it = api.handle.tessBaseAPIAnalyseLayout()
+
+  var orientation:TessOrientation
+  var direction:TessWritingDirection
+  var order:TessTextlineOrder
+  var deskewAngle:cfloat
+
+  var ri = api.handle.tessBaseAPIGetIterator()
+  var pi = ri.tessResultIteratorGetPageIterator()
+  pi.tessPageIteratorOrientation(orientation.unsafeAddr, direction.unsafeAddr, order.unsafeAddr, deskewAngle.unsafeAddr)
+
+  echo "deskew angle: ", deskewAngle
+  echo "page orientation: ", orientation
+  echo "writting direction: ", direction
+  echo "order: ", order
+
+main()

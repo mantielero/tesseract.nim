@@ -224,10 +224,14 @@ proc tessBaseAPIReadConfigFile*(handle: ptr TessBaseAPI; filename: cstring) {.
     importc: "TessBaseAPIReadConfigFile".}
 proc tessBaseAPIReadDebugConfigFile*(handle: ptr TessBaseAPI; filename: cstring) {.
     importc: "TessBaseAPIReadDebugConfigFile".}
+]#
 proc tessBaseAPISetPageSegMode*(handle: ptr TessBaseAPI; mode: TessPageSegMode) {.
     importc: "TessBaseAPISetPageSegMode".}
+
 proc tessBaseAPIGetPageSegMode*(handle: ptr TessBaseAPI): TessPageSegMode {.
     importc: "TessBaseAPIGetPageSegMode".}
+
+#[
 proc tessBaseAPIRect*(handle: ptr TessBaseAPI; imagedata: ptr cuchar;
                       bytesPerPixel: cint; bytesPerLine: cint; left: cint;
                       top: cint; width: cint; height: cint): cstring {.
@@ -287,9 +291,10 @@ proc tessBaseAPIGetComponentImages1*(handle: ptr TessBaseAPI;
     importc: "TessBaseAPIGetComponentImages1".}
 proc tessBaseAPIGetThresholdedImageScaleFactor*(handle: ptr TessBaseAPI): cint {.
     importc: "TessBaseAPIGetThresholdedImageScaleFactor".}
+]#
 proc tessBaseAPIAnalyseLayout*(handle: ptr TessBaseAPI): ptr TessPageIterator {.
     importc: "TessBaseAPIAnalyseLayout".}
-]#
+
 proc tessBaseAPIRecognize*(handle: ptr TessBaseAPI; monitor: ptr Etext_Desc): cint {.
     importc: "TessBaseAPIRecognize".}
 
@@ -412,12 +417,14 @@ proc tessPageIteratorBaseline*(handle: ptr TessPageIterator;
                                level: TessPageIteratorLevel; x1: ptr cint;
                                y1: ptr cint; x2: ptr cint; y2: ptr cint): bool {.
     importc: "TessPageIteratorBaseline".}
+]#
 proc tessPageIteratorOrientation*(handle: ptr TessPageIterator;
                                   orientation: ptr TessOrientation;
                                   writingDirection: ptr TessWritingDirection;
                                   textlineOrder: ptr TessTextlineOrder;
                                   deskewAngle: ptr cfloat) {.
     importc: "TessPageIteratorOrientation".}
+#[
 proc tessPageIteratorParagraphInfo*(handle: ptr TessPageIterator; justification: ptr TessParagraphJustification;
                                     isListItem: ptr bool; isCrown: ptr bool;
                                     firstLineIndent: ptr cint) {.
