@@ -322,9 +322,11 @@ proc tessBaseAPIGetMutableIterator*(handle: ptr TessBaseAPI): ptr TessMutableIte
     ]#
 proc tessBaseAPIGetUTF8Text*(handle: ptr TessBaseAPI): cstring {.
     importc: "TessBaseAPIGetUTF8Text".}
-#[
+
 proc tessBaseAPIGetHOCRText*(handle: ptr TessBaseAPI; pageNumber: cint): cstring {.
     importc: "TessBaseAPIGetHOCRText".}
+
+#[
 proc tessBaseAPIGetAltoText*(handle: ptr TessBaseAPI; pageNumber: cint): cstring {.
     importc: "TessBaseAPIGetAltoText".}
 proc tessBaseAPIGetTsvText*(handle: ptr TessBaseAPI; pageNumber: cint): cstring {.
