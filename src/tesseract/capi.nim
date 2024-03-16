@@ -36,6 +36,9 @@ type
   TessPageIterator* {.importc:"struct TessPageIterator".} = object
   TessChoiceIterator* {.importc:"struct TessChoiceIterator".} = object
 
+proc `$`*(self:TessResultIterator):string =
+  "struct TessResultIterator"
+
 {.push header: "capi.h".}
 type
   TessOcrEngineMode* = enum
@@ -352,7 +355,10 @@ when not defined(DISABLED_LEGACY_ENGINE):
                                   mode: TessPageSegMode; wordstr: cstring): bool {.
       importc: "TessBaseAPIAdaptToWordStr".}
 proc tessBaseAPIClear*(handle: ptr TessBaseAPI) {.importc: "TessBaseAPIClear".}
+]#
 proc tessBaseAPIEnd*(handle: ptr TessBaseAPI) {.importc: "TessBaseAPIEnd".}
+
+#[
 proc tessBaseAPIIsValidWord*(handle: ptr TessBaseAPI; word: cstring): cint {.
     importc: "TessBaseAPIIsValidWord".}
 proc tessBaseAPIGetTextDirection*(handle: ptr TessBaseAPI; outOffset: ptr cint;
@@ -381,9 +387,11 @@ proc tessBaseGetBlockTextOrientations*(handle: ptr TessBaseAPI;
 ]#
 
 ##  Page iterator
-#[
+
 proc tessPageIteratorDelete*(handle: ptr TessPageIterator) {.
     importc: "TessPageIteratorDelete".}
+
+#[
 proc tessPageIteratorCopy*(handle: ptr TessPageIterator): ptr TessPageIterator {.
     importc: "TessPageIteratorCopy".}
 proc tessPageIteratorBegin*(handle: ptr TessPageIterator) {.
@@ -437,9 +445,10 @@ proc tessPageIteratorParagraphInfo*(handle: ptr TessPageIterator; justification:
 ]#
 
 ##  Result iterator
-#[
+
 proc tessResultIteratorDelete*(handle: ptr TessResultIterator) {.
     importc: "TessResultIteratorDelete".}
+#[
 proc tessResultIteratorCopy*(handle: ptr TessResultIterator): ptr TessResultIterator {.
     importc: "TessResultIteratorCopy".}
 ]#
@@ -484,6 +493,8 @@ proc tessResultIteratorSymbolIsSubscript*(handle: ptr TessResultIterator): bool 
     importc: "TessResultIteratorSymbolIsSubscript".}
 proc tessResultIteratorSymbolIsDropcap*(handle: ptr TessResultIterator): bool {.
     importc: "TessResultIteratorSymbolIsDropcap".}
+
+## Choice Iterator
 proc tessChoiceIteratorDelete*(handle: ptr TessChoiceIterator) {.
     importc: "TessChoiceIteratorDelete".}
 ]#
