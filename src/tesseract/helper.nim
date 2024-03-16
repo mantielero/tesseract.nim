@@ -91,6 +91,16 @@ proc recognize*(self:Tesseract; monitor: ptr Etext_Desc = nil) =
   if ok != 0:
     raise newException(ValueError, "failed to recognize the image")
 
+proc setPageSegMode*(self:Tesseract; mode: TessPageSegMode) =
+  self.handle.tessBaseAPISetPageSegMode(mode)
+
+proc getPageSegMode*(self:Tesseract): TessPageSegMode =
+  self.handle.tessBaseAPIGetPageSegMode
+
+
+proc analyseLayout*(api:Tesseract): ptr TessPageIterator =
+  api.handle.tessBaseAPIAnalyseLayout() 
+
 ## # Iterators
 
 # RIL_BLOCK, RIL_PARA, RIL_TEXTLINE, RIL_WORD, RIL_SYMBOL
@@ -162,6 +172,25 @@ proc getBoundingBox*(self:ptr TessPageIterator; level:TessPageIteratorLevel):tup
   if not ok:
     raise newException(ValueError, "failed getting the Bounding Box")      
   return (left.int,top.int,right.int,bottom.int)
+
+
+proc getOrientation*(self:ptr TessPageIterator):tuple[pageOrientation:TessOrientation; 
+                                                      writtingDirection:TessWritingDirection;
+                                                      order:TessTextlineOrder;
+                                                      deskewAngle:float] =
+                                                      
+  var orientation:TessOrientation
+  var direction:TessWritingDirection
+  var order:TessTextlineOrder
+  var deskewAngle:cfloat
+  self.tessPageIteratorOrientation(orientation.unsafeAddr, 
+                                   direction.unsafeAddr, 
+                                   order.unsafeAddr, 
+                                   deskewAngle.unsafeAddr)
+  return (orientation,direction,order, deskewAngle.float )
+
+
+
 
 ## # Result Iterator
 

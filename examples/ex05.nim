@@ -12,25 +12,19 @@ proc main =
   var api = newTesseract("eng")
   let image = pixRead("eurotext.tif")
 
-  api.handle.tessBaseAPISetPageSegMode(PSM_AUTO_OSD)
-  echo api.handle.tessBaseAPIGetPageSegMode
+  api.setPageSegMode(PSM_AUTO_OSD)
+
   api.setImage(image)
-  var res = api.handle.tessBaseAPIRecognize(nil)
+  api.recognize()
 
-  var it = api.handle.tessBaseAPIAnalyseLayout()
-
-  var orientation:TessOrientation
-  var direction:TessWritingDirection
-  var order:TessTextlineOrder
-  var deskewAngle:cfloat
+  var it = api.analyseLayout()
 
   var ri = api.handle.tessBaseAPIGetIterator()
   var pi = ri.tessResultIteratorGetPageIterator()
-  pi.tessPageIteratorOrientation(orientation.unsafeAddr, direction.unsafeAddr, order.unsafeAddr, deskewAngle.unsafeAddr)
-
-  echo "deskew angle: ", deskewAngle
-  echo "page orientation: ", orientation
-  echo "writting direction: ", direction
-  echo "order: ", order
+  var val = pi.getOrientation()
+  echo "deskew angle: ", val.deskewAngle
+  echo "page orientation: ", val.pageOrientation
+  echo "writting direction: ", val.writtingDirection
+  echo "order: ", val.order
 
 main()
