@@ -14,10 +14,10 @@ proc main =
   api.setImage(image)
 
   # Set lstm_choice_mode to alternative symbol choices per character, bbox is at word level.
-  var ok = api.handle.tessBaseAPISetVariable("lstm_choice_mode", "2")
+  api.setVariable("lstm_choice_mode", "2")
 
   # Get HOCR result
-  var outText = api.handle.tessBaseAPIGetHOCRText(0)
+  var outText = api.getHOCRText(0)
 
   echo "HOCR alternative symbol choices  per character :\n", outText
 

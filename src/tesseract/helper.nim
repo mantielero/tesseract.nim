@@ -113,6 +113,12 @@ proc setVariable*(api:Tesseract; variable,value:string) =
   #if not ok:
   #  raise newException(ValueError, "failed setting variable: " & variable & "=" & value)
 
+
+
+proc getHOCRText*(api:Tesseract; pageNumber:int):string =
+  $api.handle.tessBaseAPIGetHOCRText(pageNumber.cint)
+
+
 ## # Iterators
 
 # RIL_BLOCK, RIL_PARA, RIL_TEXTLINE, RIL_WORD, RIL_SYMBOL
