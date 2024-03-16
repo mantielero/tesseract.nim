@@ -493,11 +493,14 @@ proc tessResultIteratorSymbolIsSubscript*(handle: ptr TessResultIterator): bool 
     importc: "TessResultIteratorSymbolIsSubscript".}
 proc tessResultIteratorSymbolIsDropcap*(handle: ptr TessResultIterator): bool {.
     importc: "TessResultIteratorSymbolIsDropcap".}
+]#
+
+
 
 ## Choice Iterator
 proc tessChoiceIteratorDelete*(handle: ptr TessChoiceIterator) {.
     importc: "TessChoiceIteratorDelete".}
-]#
+
 proc tessChoiceIteratorNext*(handle: ptr TessChoiceIterator): bool {.
     importc: "TessChoiceIteratorNext".}
 

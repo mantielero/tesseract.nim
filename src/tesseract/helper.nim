@@ -1,6 +1,6 @@
 import capi
 import pixie, leptonica
-import std/[strformat]
+import std/[strformat,strutils]
 
 type
   TesserAct* = object
@@ -101,6 +101,18 @@ proc getPageSegMode*(self:Tesseract): TessPageSegMode =
 proc analyseLayout*(api:Tesseract): ptr TessPageIterator =
   api.handle.tessBaseAPIAnalyseLayout() 
 
+
+
+proc setRectangle*(api:Tesseract;left,top,right,bottom:int) =
+  api.handle.tessBaseAPISetRectangle(left.cint, top.cint, right.cint, bottom.cint)
+
+proc setVariable*(api:Tesseract; variable,value:string) =
+  # https://zdenop.github.io/tesseract-doc/classtesseract_1_1_tess_base_a_p_i.html#a2e09259c558c6d8e0f7e523cbaf5adf5
+  var ok = api.handle.tessBaseAPISetVariable(variable, value)
+  #echo ok
+  #if not ok:
+  #  raise newException(ValueError, "failed setting variable: " & variable & "=" & value)
+
 ## # Iterators
 
 # RIL_BLOCK, RIL_PARA, RIL_TEXTLINE, RIL_WORD, RIL_SYMBOL
@@ -130,7 +142,14 @@ iterator symbols*(self:Tesseract; textOnly:bool = true): BoxItem =
     yield newBoxItem( boxaGetBox(boxes, i, L_CLONE) )
 
 
-## # Page Iterator
+##[
+# Page Iterator
+
+El PageIterator es más amplio y se utiliza para recorrer las páginas de un documento multipágina.
+Proporciona acceso a los resultados de reconocimiento de texto en cada página.
+Puedes usarlo para iterar a través de las páginas de un archivo PDF o cualquier otro documento de varias páginas.
+]##
+
 # type
 #   PageIterator* = object
 #     handle: ptr TessPageIterator
@@ -192,7 +211,14 @@ proc getOrientation*(self:ptr TessPageIterator):tuple[pageOrientation:TessOrient
 
 
 
-## # Result Iterator
+##[ 
+# Result Iterator
+
+It is use to iterate over the text recognition results.
+- Proporciona acceso a información como el texto reconocido, las coordenadas de la caja delimitadora y las confidencias de reconocimiento.
+- Puedes usarlo para extraer palabras, líneas o bloques de texto de una imagen procesada por Tesseract.
+
+]##
 
 # type
 #   ResultIteratorObj* = object
@@ -227,7 +253,6 @@ iterator resultIterator*(self:Tesseract; level:TessPageIteratorLevel): ptr TessR
   #echo repr cast[pointer](ri.handle)#.unsafeAddr
   var flag = true
   while flag:
-    echo repr cast[pointer](ri)
     yield ri
     flag = ri.tessResultIteratorNext(level)
   tessResultIteratorDelete(ri)
@@ -259,3 +284,34 @@ converter toPageIterator*(val:ptr TessResultIterator):ptr TessPageIterator =
     flag =  pi.tessPageIteratorNext(level)
 ]#
 
+##[
+# Choice iterator 
+
+El ChoiceIterator se utiliza para recorrer las alternativas de reconocimiento para una palabra específica.
+Cuando Tesseract encuentra una palabra ambigua, como una palabra que puede ser interpretada de diferentes maneras, el ChoiceIterator permite acceder a todas las posibles opciones.
+Esto es útil para aplicaciones como corrección ortográfica o selección de la mejor opción de reconocimiento.
+
+]##
+converter toChoiceIterator*(val:ptr TessResultIterator):ptr TessChoiceIterator =
+  val.tessResultIteratorGetChoiceIterator()
+
+iterator choiceIterator*(self:ptr TessChoiceIterator): ptr TessChoiceIterator =
+  var flag = true
+  while flag:
+    #echo repr cast[pointer](ri)
+    yield self
+    flag = self.tessChoiceIteratorNext()
+  tessChoiceIteratorDelete(self)
+
+
+proc getText*(self:ptr TessChoiceIterator):string =
+  $self.tessChoiceIteratorGetUTF8Text()
+
+proc getConfidence*(self:ptr TessChoiceIterator):float =
+  self.tessChoiceIteratorConfidence.float  
+
+iterator choices*(self:ptr TessChoiceIterator):tuple[txt:string; confidence:float] =
+  for ci in self.choiceIterator():
+    var choice = ci.getText
+    var conf = ci.getConfidence
+    yield (choice,conf)  
